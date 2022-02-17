@@ -31,13 +31,35 @@ async def media_receive_handler(_, m: Message):
     stream_link = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_name(m))}?hash={get_hash(log_msg)}"
     short_link = f"{Var.URL}{get_hash(log_msg)}{log_msg.message_id}"
     logging.info(f"Generated link: {stream_link} for {m.from_user.first_name}")
+    file_name = None
+        if m.video:
+            file_name = f"{m.video.file_name}"
+        elif m.document:
+            file_name = f"{m.document.file_name}"
+        elif m.audio:
+            file_name = f"{m.audio.file_name}"
+    file_size = None
+        if m.video:
+            file_size = f"{humanbytes(m.video.file_size)}"
+        elif m.document:
+            file_size = f"{humanbytes(m.document.file_size)}"
+        elif m.audio:
+            file_size = f"{humanbytes(m.audio.file_size)}"    
     await m.reply_text(
-        text="<code>{}</code>\n(<a href='{}'>shortened</a>)".format(
-            stream_link, short_link
+        text="""Yᴏᴜ'ʀᴇ Lɪɴᴋ Is Rᴇᴀᴅʏ
+
+Fɪʟᴇ ɴᴀᴍᴇ : 
+
+Fɪʟᴇ ꜱɪᴢᴇ : 
+
+Dᴏᴡɴʟᴏᴀᴅ : 
+
+Nᴏᴛᴇ :  Lɪɴᴋ Wᴏɴ'ᴛ Exᴘɪʀᴇ Uɴᴛɪʟ I Dᴇʟᴇᴛᴇ""".format(
+            file_name, file_size, short_link 
         ),
         quote=True,
         parse_mode="html",
         reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton("Open", url=stream_link)]]
+            [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ", url=short_link)]]
         ),
     )
