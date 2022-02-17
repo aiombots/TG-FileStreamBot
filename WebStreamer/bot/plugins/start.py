@@ -2,7 +2,7 @@
 # Coding : Jyothis Jayanth [@EverythingSuckz]
 
 from pyrogram import filters
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton 
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery 
 from WebStreamer.bot import StreamBot
 
 
@@ -12,7 +12,7 @@ async def start(_, m: Message):
       InlineKeyboardButton("Gʀᴏᴜᴘ", url="https://t.me/AIOM_BOTS_GROUP"),
       InlineKeyboardButton("Cʜᴀɴɴᴇʟ", url="https://t.me/AIOM_BOTS")
       ],[
-      InlineKeyboardButton("Cʟᴏsᴇ", url="https://t.me/AIOM_BOTS")
+      InlineKeyboardButton("Cʟᴏsᴇ", callback_data="close")
       ]]
     await m.reply_text(
         text=f"""Hᴇʟʟᴏ 👋 {m.from_user.mention(style="md")}, 
@@ -26,3 +26,9 @@ Jᴜsᴛ Sᴇɴᴅ Mᴇ A Tᴇʟᴇɢʀᴀᴍ Fɪʟᴇ Aɴᴅ Sᴇᴇ Mʏ Pᴏ�
 Pᴏᴡᴇʀᴇᴅ ʙʏ : @AIOM_BOTS"""
         reply_markup=InlineKeyboardMarkup(button)
     )
+
+@StreamBot.on_callback_query()
+async def callback(bot, msg: CallbackQuery):
+    if msg.data == "close":
+        await msg.message.delete()
+
